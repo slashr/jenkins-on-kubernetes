@@ -1,0 +1,26 @@
+FROM jenkinsci/blueocean:latest
+
+ENV TZ=Europe/Berlin
+
+#Colourful build output
+RUN /usr/local/bin/install-plugins.sh ansicolor
+
+#Overview of pipeline stages
+RUN /usr/local/bin/install-plugins.sh pipeline-stage-view
+
+#Dashboard view
+RUN /usr/local/bin/install-plugins.sh dashboard-view
+
+#BitBucket integration
+RUN /usr/local/bin/install-plugins.sh bitbucket
+
+#Monitoring
+RUN /usr/local/bin/install-plugins.sh monitoring
+
+#Better theme
+RUN /usr/local/bin/install-plugins.sh simple-theme-plugin
+
+# Plugin for scaling Jenkins agents
+RUN /usr/local/bin/install-plugins.sh kubernetes
+
+USER jenkins
