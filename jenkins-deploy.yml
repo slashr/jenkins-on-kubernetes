@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jenkins-master
+  namespace: jenkins
+spec:
+  selector:
+    matchLabels:
+      app: jenkins
+  replicas: 1
+  serviceName: "jenkins"
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+        - name: jenkins-master
+          image: <account-id>.dkr.ecr.eu-central-1.amazonaws.com/jenkins/master
+          imagePullPolicy: Always
+          env:
+            - name: JAVA_OPTS
+              value: -Djenkins.install.runSetupWizard=false
+          ports:
+          - name: http-port
+            containerPort: 8080
+          - name: jnlp-port
+            containerPort: 50000
+          volumeMounts:
+          - mountPath: "/var/jenkins_home"
+            name: jenkins-volume
+          securityContext:
+            runAsUser: 0
+      volumes:
+        - name: jenkins-volume
+          persistentVolumeClaim:
+            claimName: jenkins-pvc
